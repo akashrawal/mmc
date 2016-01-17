@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+includedir=@includedir@
+libdir=@libdir@
+
+Name: MMC
+Description: Modular Middleware: C language bindings
+Version: @VERSION@
+
+Libs: -lm -lmmc
+Cflags:
