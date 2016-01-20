@@ -18,11 +18,6 @@
  * along with Modular Middleware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MMC_SERVANT_H 
-#define MMC_SERVANT_H
-
-#include "stub.h"
-
 //Forward declarations
 typedef struct _MmcMPContext MmcMPContext;
 typedef struct _MmcServant MmcServant;
@@ -80,4 +75,3 @@ typedef struct _MmcServant MmcServant;
 void mmc_mp_context_reply
 	(MmcMPContext *ctx, void *out_args);
 
-#endif //MMC_SERVANT_H

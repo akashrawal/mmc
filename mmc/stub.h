@@ -18,11 +18,6 @@
  * along with Modular Middleware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MMC_STUB_H 
-#define MMC_STUB_H
-
-#include "msg.h"
-
 //Interface for client side stubs (prefered, not mandatory to follow)
 typedef MmcMsg * (*MmcStubCreateMsg) (void *args);
 typedef int (*MmcStubReadReply) (MmcMsg *reply_msg, void *out_args);
@@ -37,5 +32,3 @@ typedef struct
 //(prefered but not mandatory to follow)
 typedef MmcMsg * (*MmcCreateReplyFn) (void *out_args);
 
-
-#endif //MMC_STUB_H

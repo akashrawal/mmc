@@ -9,11 +9,11 @@ mmc_c = \
 	stub.c \
 	servant.c
 
-mmc_h = \
+mmc_h = mmc.h incl.h \
 	utils.h \
 	msg.h \
 	stub.h \
-	servant.h 
+	servant.h
      
 libmmc_la_SOURCES = $(mmc_c) $(mmc_h)       
 libmmc_la_CFLAGS = -Wall -I$(top_builddir) -I$(top_srcdir)

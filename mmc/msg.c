@@ -18,7 +18,7 @@
  * along with Modular Middleware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "msg.h"
+#include "incl.h"
 
 mmc_rc_define(MmcMsg, mmc_msg)
 

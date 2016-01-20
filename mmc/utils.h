@@ -17,16 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Modular Middleware.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef MMC_UTILS_H
-#define MMC_UTILS_H
-
-//TODO: Decide the includes in API headers
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-
 
 /**
  * \addtogroup mmc_utils
@@ -55,17 +45,17 @@
 //Errors
 #ifdef __GNUC__
 
-#define mmc_error(...) \
+#define mmc_context_error(context, ...) \
 	do { \
-		fprintf(stderr, "MMC: %s: %s:%d: ERROR:", __PRETTY_FUNCTION__, __FILE__, __LINE__); \
+		fprintf(stderr, context ": %s: %s:%d: ERROR:", __PRETTY_FUNCTION__, __FILE__, __LINE__); \
 		fprintf(stderr, __VA_ARGS__); \
 		fprintf(stderr, "\n"); \
 		mmc_warn_break(1); \
 	} while (0)
 
-#define mmc_warn(...) \
+#define mmc_context_warn(context, ...) \
 	do { \
-		fprintf(stderr, "MMC: %s: %s:%d: WARNING:", __PRETTY_FUNCTION__, __FILE__, __LINE__); \
+		fprintf(stderr, context ": %s: %s:%d: WARNING:", __PRETTY_FUNCTION__, __FILE__, __LINE__); \
 		fprintf(stderr, __VA_ARGS__); \
 		fprintf(stderr, "\n"); \
 		mmc_warn_break(0); \
@@ -73,17 +63,17 @@
 
 #else
 
-#define mmc_error(...) \
+#define mmc_context_error(context, ...) \
 	do { \
-		fprintf(stderr, "MMC: %s:%d: ERROR:", __FILE__, __LINE__); \
+		fprintf(stderr, context ": %s:%d: ERROR:", __FILE__, __LINE__); \
 		fprintf(stderr, __VA_ARGS__); \
 		fprintf(stderr, "\n"); \
 		mmc_warn_break(1); \
 	} while (0)
 
-#define mmc_warn(...) \
+#define mmc_context_warn(context, ...) \
 	do { \
-		fprintf(stderr, "MMC: %s:%d: WARNING:", __FILE__, __LINE__); \
+		fprintf(stderr, context ": %s:%d: WARNING:", __FILE__, __LINE__); \
 		fprintf(stderr, __VA_ARGS__); \
 		fprintf(stderr, "\n"); \
 		mmc_warn_break(0); \
@@ -91,7 +81,10 @@
 
 #endif	
 
-/**If you want to break at an error or warning from Modular Middleware library
+#define mmc_error(...) mmc_context_error("MMC", __VA_ARGS__)
+#define mmc_warn(...) mmc_context_error("MMC", __VA_ARGS__)
+
+/**If you want to break at an error or warning from Modular Middleware
  * use debugger to break at this function.
  * 
  * \param to_abort In case of error its value is 1, else it is 0.
@@ -211,5 +204,3 @@ typedef struct
 /**
  * \}
  */
-
-#endif //MMC_UTILS_H

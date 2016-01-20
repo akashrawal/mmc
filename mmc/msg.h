@@ -18,11 +18,6 @@
  * along with Modular Middleware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MMC_MSG_H
-#define MMC_MSG_H
-
-#include "utils.h"
-
 typedef struct _MmcMsg MmcMsg;
 
 typedef void (*MmcFreeFn)(void *mem);
@@ -43,5 +38,3 @@ MmcMsg *mmc_msg_new
 	(size_t mem_len, MmcFreeFn mem_free, void *mem, size_t submsg_len);
 
 MmcMsg *mmc_msg_newa(size_t mem_len, size_t submsg_len);
-
-#endif //MMC_MSG_H

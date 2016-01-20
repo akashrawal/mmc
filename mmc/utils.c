@@ -18,7 +18,7 @@
  * along with Modular Middleware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <mmc/utils.h>
+#include "incl.h"
 
 //If you want to break at an error or warning break at this function.
 void mmc_warn_break(int to_abort)
