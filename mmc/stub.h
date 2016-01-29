@@ -20,7 +20,7 @@
 
 //Interface for client side stubs (prefered, not mandatory to follow)
 typedef MmcMsg * (*MmcStubCreateMsg) (void *args);
-typedef int (*MmcStubReadReply) (MmcMsg *reply_msg, void *out_args);
+typedef MmcStatus (*MmcStubReadReply) (MmcMsg *reply_msg, void *out_args);
 
 typedef struct
 {

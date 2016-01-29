@@ -68,7 +68,7 @@ typedef struct _MmcServant MmcServant;
 		MmcServantDispatchFn dispatch, MmcServantDestroyFn destroy);
 		
 	//Virtual function to deliver message to servant
-	int mmc_servant_dispatch
+	MmcStatus mmc_servant_dispatch
 		(MmcServant *servant, MmcMsg *args_msg, MmcMPContext *ctx);
 
 //Managed serialization

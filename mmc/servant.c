@@ -73,7 +73,7 @@ MmcServant *mmc_servant_create
 }
 	
 //Virtual function to deliver message to servant
-int mmc_servant_dispatch
+MmcStatus mmc_servant_dispatch
 	(MmcServant *servant, MmcMsg *args_msg, MmcMPContext *ctx)
 {
 	return (*servant->dispatch) (servant, args_msg, ctx);
