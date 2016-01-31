@@ -141,6 +141,8 @@ void *mmc_alloc2(size_t size1, size_t size2, void **mem2_return);
  */
 void *mmc_tryalloc2(size_t size1, size_t size2, void **mem2_return);
 
+#define mmc_new(type) ((type *) mmc_alloc(sizeof(type)))
+
 //LATER: Check if this is correct
 #define mmc_alloc_boundary (2 * sizeof(void *))
 
