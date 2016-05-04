@@ -210,6 +210,42 @@ typedef struct
 		x->refcount = 1; \
 	} while (0)
 
+
+//Resizable buffer
+typedef struct
+{
+	char *data;
+	size_t len, alloc_len;
+} MmcRBuf;
+
+void mmc_rbuf_init(MmcRBuf *rbuf);
+void mmc_rbuf_resize(MmcRBuf *rbuf, size_t new_len);
+void mmc_rbuf_append(MmcRBuf *rbuf, const void *data, size_t len);
+void mmc_rbuf_append1(MmcRBuf *rbuf, char val);
+
+//Template for dynamic arrays
+#define mmc_declare_array(TypeName, ArrayTypeName, array_type_name) \
+typedef union { MmcRBuf parent; TypeName *data; } ArrayTypeName; \
+static inline void array_type_name ## _init(ArrayTypeName *array) \
+{ \
+	mmc_rbuf_init((MmcRBuf *) array); \
+} \
+static inline void array_type_name ## _resize \
+	(ArrayTypeName *array, size_t new_len) \
+{ \
+	mmc_rbuf_resize((MmcRBuf *) array, new_len * sizeof(TypeName)); \
+} \
+static inline void array_type_name ## _append \
+	(ArrayTypeName *array, TypeName data) \
+{ \
+	mmc_rbuf_append((MmcRBuf *) array, &data, sizeof(TypeName)); \
+} \
+static inline size_t array_type_name ## _length(ArrayTypeName *array) \
+{ \
+	return ((MmcRBuf *) array)->len / sizeof(TypeName); \
+}
+
+
 /**
  * \}
  */

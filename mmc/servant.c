@@ -34,7 +34,6 @@ MmcMPContext *mmc_mp_context_create
 	ctx = (MmcMPContext *) mmc_alloc(struct_size);
 	
 	ctx->reply_fn = reply_fn;
-	ctx->create_reply_fn = NULL;
 	
 	return ctx;
 }
@@ -89,11 +88,11 @@ void mmc_servant_destroy(MmcServant *servant)
 
 //Managed serialization
 void mmc_mp_context_reply
-	(MmcMPContext *ctx, void *out_args)
+	(MmcMPContext *ctx, MmcSkelSpec skel, void *out_args)
 {
 	MmcMsg *reply_msg;
 	
-	reply_msg = (*ctx->create_reply_fn) (out_args);
+	reply_msg = (*skel.create_reply) (out_args);
 	mmc_mp_context_reply_msg(ctx, reply_msg);
 	mmc_msg_unref(reply_msg);
 }

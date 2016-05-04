@@ -32,7 +32,6 @@ typedef struct _MmcServant MmcServant;
 	struct _MmcMPContext
 	{
 		MmcMPContextReplyFn reply_fn;
-		MmcCreateReplyFn create_reply_fn;
 	};
 
 	//Base class constructor
@@ -73,5 +72,4 @@ typedef struct _MmcServant MmcServant;
 
 //Managed serialization
 void mmc_mp_context_reply
-	(MmcMPContext *ctx, void *out_args);
-
+	(MmcMPContext *ctx, MmcSkelSpec skel, void *out_args);

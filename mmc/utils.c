@@ -103,3 +103,55 @@ void *mmc_memdup(const void *mem, size_t len)
 	return res;
 }
 
+//Resizable buffer
+
+#define MMC_RBUF_MIN_LEN 32
+
+void mmc_rbuf_init(MmcRBuf *rbuf)
+{
+	rbuf->len = 0;
+	rbuf->alloc_len = MMC_RBUF_MIN_LEN;
+	rbuf->data = (char *) mmc_alloc(rbuf->alloc_len);
+}
+
+void mmc_rbuf_resize(MmcRBuf *rbuf, size_t new_len)
+{
+	if (new_len > rbuf->alloc_len)
+	{
+		while (new_len > rbuf->alloc_len)
+			rbuf->alloc_len *= 2;
+		
+		rbuf->data = (char *) mmc_realloc(rbuf->data, rbuf->alloc_len);
+	}
+	else if (new_len <= MMC_RBUF_MIN_LEN 
+		&& rbuf->alloc_len > MMC_RBUF_MIN_LEN)
+	{
+		rbuf->alloc_len = MMC_RBUF_MIN_LEN;
+		
+		rbuf->data = (char *) mmc_realloc(rbuf->data, rbuf->alloc_len);
+	}
+	else if (new_len < (rbuf->alloc_len / 2))
+	{
+		while (new_len < (rbuf->alloc_len / 2))
+			rbuf->alloc_len /= 2;
+		
+		rbuf->data = (char *) mmc_realloc(rbuf->data, rbuf->alloc_len);
+	}
+	
+	rbuf->len = new_len;
+}
+
+void mmc_rbuf_append(MmcRBuf *rbuf, const void *data, size_t len)
+{
+	size_t orig_len = rbuf->len;
+	mmc_rbuf_resize(rbuf, orig_len + len);
+	memcpy(rbuf->data + orig_len, data, len);
+}
+
+void mmc_rbuf_append1(MmcRBuf *rbuf, char val)
+{
+	size_t orig_len = rbuf->len;
+	mmc_rbuf_resize(rbuf, orig_len + 1);
+	rbuf->data[orig_len] = val;
+}
+
