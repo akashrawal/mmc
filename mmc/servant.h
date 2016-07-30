@@ -39,7 +39,7 @@ typedef struct _MmcServant MmcServant;
 		(size_t struct_size, MmcMPContextReplyFn reply_fn);
 
 	//Virtual function to send reply back
-	void mmc_mp_context_reply_msg
+	void mmc_mp_context_reply
 		(MmcMPContext *ctx, MmcMsg *reply_msg);
 
 
@@ -70,6 +70,3 @@ typedef struct _MmcServant MmcServant;
 	MmcStatus mmc_servant_dispatch
 		(MmcServant *servant, MmcMsg *args_msg, MmcMPContext *ctx);
 
-//Managed serialization
-void mmc_mp_context_reply
-	(MmcMPContext *ctx, MmcSkelSpec skel, void *out_args);

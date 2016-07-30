@@ -39,7 +39,7 @@ MmcMPContext *mmc_mp_context_create
 }
 
 //Virtual function to send reply back
-void mmc_mp_context_reply_msg
+void mmc_mp_context_reply
 	(MmcMPContext *ctx, MmcMsg *reply_msg)
 {
 	(*ctx->reply_fn)(ctx, reply_msg);
@@ -86,14 +86,5 @@ void mmc_servant_destroy(MmcServant *servant)
 	free(servant);
 }
 
-//Managed serialization
-void mmc_mp_context_reply
-	(MmcMPContext *ctx, MmcSkelSpec skel, void *out_args)
-{
-	MmcMsg *reply_msg;
-	
-	reply_msg = (*skel.create_reply) (out_args);
-	mmc_mp_context_reply_msg(ctx, reply_msg);
-	mmc_msg_unref(reply_msg);
-}
+
 

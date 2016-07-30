@@ -26,15 +26,5 @@ typedef struct
 {
 	MmcStubCreateMsg create_msg;
 	MmcStubReadReply read_reply;
-} MmcStubSpec;
-
-//Interface for servant side skeletons
-//(prefered but not mandatory to follow)
-typedef MmcMsg * (*MmcCreateReplyFn) (void *out_args);
-
-typedef struct
-{
-	MmcCreateReplyFn create_reply;
-} MmcSkelSpec;
-
+} MmcStub;
 
