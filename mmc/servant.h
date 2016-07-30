@@ -47,7 +47,7 @@ typedef struct _MmcServant MmcServant;
 	//Base class for the servant. Compulsory. 
 	//Inherited in serialization and then user code to provide message passing 
 	//interface abstraction to network module
-	typedef int (* MmcServantHandleMsgFn) 
+	typedef void (* MmcServantHandleMsgFn) 
 		(MmcServant *servant, MmcMsg *msg, MmcMPContext *ctx);
 	typedef void (*MmcServantDestroyFn) (MmcServant *servant);
 	struct _MmcServant
@@ -67,6 +67,6 @@ typedef struct _MmcServant MmcServant;
 		MmcServantHandleMsgFn handle_msg, MmcServantDestroyFn destroy);
 		
 	//Virtual function to deliver message to servant
-	MmcStatus mmc_servant_handle_msg
+	void mmc_servant_handle_msg
 		(MmcServant *servant, MmcMsg *msg, MmcMPContext *ctx);
 

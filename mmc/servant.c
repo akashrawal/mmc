@@ -72,10 +72,10 @@ MmcServant *mmc_servant_create
 }
 	
 //Virtual function to deliver message to servant
-MmcStatus mmc_servant_handle_msg
+void mmc_servant_handle_msg
 	(MmcServant *servant, MmcMsg *msg, MmcMPContext *ctx)
 {
-	return (*servant->handle_msg) (servant, msg, ctx);
+	(*servant->handle_msg) (servant, msg, ctx);
 }
 
 //Destructor
