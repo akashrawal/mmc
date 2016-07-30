@@ -55,7 +55,7 @@ mmc_rc_define(MmcServant, mmc_servant)
 //Base class constructor
 MmcServant *mmc_servant_create
 	(size_t struct_size, 
-	MmcServantDispatchFn dispatch, MmcServantDestroyFn destroy)
+	MmcServantHandleMsgFn handle_msg, MmcServantDestroyFn destroy)
 {
 	MmcServant *servant;
 	
@@ -65,17 +65,17 @@ MmcServant *mmc_servant_create
 	servant = (MmcServant *) mmc_alloc(struct_size);
 	
 	mmc_rc_init(servant);
-	servant->dispatch = dispatch;
+	servant->handle_msg = handle_msg;
 	servant->destroy = destroy;
 	
 	return servant;
 }
 	
 //Virtual function to deliver message to servant
-MmcStatus mmc_servant_dispatch
-	(MmcServant *servant, MmcMsg *args_msg, MmcMPContext *ctx)
+MmcStatus mmc_servant_handle_msg
+	(MmcServant *servant, MmcMsg *msg, MmcMPContext *ctx)
 {
-	return (*servant->dispatch) (servant, args_msg, ctx);
+	return (*servant->handle_msg) (servant, msg, ctx);
 }
 
 //Destructor
