@@ -59,8 +59,6 @@ typedef struct _MmcServant MmcServant;
 		MmcServantDestroyFn destroy;
 	};
 
-	mmc_rc_declare(MmcServant, mmc_servant)
-
 	//Base class constructor
 	MmcServant *mmc_servant_create
 		(size_t struct_size, 
@@ -69,4 +67,6 @@ typedef struct _MmcServant MmcServant;
 	//Virtual function to deliver message to servant
 	void mmc_servant_handle_msg
 		(MmcServant *servant, MmcMsg *msg, MmcMPContext *ctx);
+	
+	mmc_rc_declare(MmcServant, mmc_servant)
 

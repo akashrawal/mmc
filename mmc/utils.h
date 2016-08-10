@@ -246,6 +246,43 @@ static inline size_t array_type_name ## _length(ArrayTypeName *array) \
 }
 
 
+//Generic handling of callback arguments
+typedef struct 
+{
+	size_t size;
+} MmcSized;
+
+#define MMC_SIZED_DECLARE(type, name) \
+	type name; ((MmcSized *) (&name))->size = sizeof(name)
+	
+typedef MmcSized MmcArgs;
+
+#define MMC_ARGS_DECLARE(type, name) MMC_SIZED_DECLARE(type, name)
+
+
+//Generic callback format
+typedef struct _MmcCallback MmcCallback;
+
+typedef void (*MmcCallbackFn) (MmcArgs *args, MmcCallback *self);
+struct _MmcCallback
+{
+	size_t size;
+	MmcCallbackFn fn;
+}
+
+#define MMC_CALLBACK_DECLARE(type, name) \
+	type name; \
+	((MmcCallback *) (&name))->size = sizeof(name); \
+	((MmcCallback *) (&name))->fn = NULL
+
+typedef struct
+{
+	MmcCallback parent;
+	MmcCallbackFn indirect_fn;
+} MmcIndirectCallback;
+
+
+
 /**
  * \}
  */
