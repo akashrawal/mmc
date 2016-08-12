@@ -28,15 +28,15 @@
 //Failable operations
 typedef enum
 {
-	MMC_SUCCESS = 0,
-	MMC_FAILURE = -1
+    MMC_SUCCESS = 0,
+    MMC_FAILURE = -1
 } MmcStatus;
 
 //Adds integer to pointer
 #define MMC_PTR_ADD(ptr, bytes) ((void *) (((int8_t *) (ptr)) + (bytes)))
 
 #define mmc_encl_struct(ptr, type, member) \
-	((type *) (MMC_PTR_ADD((ptr), -(offsetof(type, member)))))
+    ((type *) (MMC_PTR_ADD((ptr), -(offsetof(type, member)))))
 
 //Pointer casting macros
 #define MMC_UINT_TO_PTR(v) MMC_INT_TO_PTR(v))
@@ -53,40 +53,40 @@ typedef enum
 #ifdef __GNUC__
 
 #define mmc_context_error(context, ...) \
-	do { \
-		fprintf(stderr, context ": %s: %s:%d: ERROR:", __PRETTY_FUNCTION__, __FILE__, __LINE__); \
-		fprintf(stderr, __VA_ARGS__); \
-		fprintf(stderr, "\n"); \
-		mmc_warn_break(1); \
-	} while (0)
+    do { \
+        fprintf(stderr, context ": %s: %s:%d: ERROR:", __PRETTY_FUNCTION__, __FILE__, __LINE__); \
+        fprintf(stderr, __VA_ARGS__); \
+        fprintf(stderr, "\n"); \
+        mmc_warn_break(1); \
+    } while (0)
 
 #define mmc_context_warn(context, ...) \
-	do { \
-		fprintf(stderr, context ": %s: %s:%d: WARNING:", __PRETTY_FUNCTION__, __FILE__, __LINE__); \
-		fprintf(stderr, __VA_ARGS__); \
-		fprintf(stderr, "\n"); \
-		mmc_warn_break(0); \
-	} while (0)
+    do { \
+        fprintf(stderr, context ": %s: %s:%d: WARNING:", __PRETTY_FUNCTION__, __FILE__, __LINE__); \
+        fprintf(stderr, __VA_ARGS__); \
+        fprintf(stderr, "\n"); \
+        mmc_warn_break(0); \
+    } while (0)
 
 #else
 
 #define mmc_context_error(context, ...) \
-	do { \
-		fprintf(stderr, context ": %s:%d: ERROR:", __FILE__, __LINE__); \
-		fprintf(stderr, __VA_ARGS__); \
-		fprintf(stderr, "\n"); \
-		mmc_warn_break(1); \
-	} while (0)
+    do { \
+        fprintf(stderr, context ": %s:%d: ERROR:", __FILE__, __LINE__); \
+        fprintf(stderr, __VA_ARGS__); \
+        fprintf(stderr, "\n"); \
+        mmc_warn_break(1); \
+    } while (0)
 
 #define mmc_context_warn(context, ...) \
-	do { \
-		fprintf(stderr, context ": %s:%d: WARNING:", __FILE__, __LINE__); \
-		fprintf(stderr, __VA_ARGS__); \
-		fprintf(stderr, "\n"); \
-		mmc_warn_break(0); \
-	} while (0)
+    do { \
+        fprintf(stderr, context ": %s:%d: WARNING:", __FILE__, __LINE__); \
+        fprintf(stderr, __VA_ARGS__); \
+        fprintf(stderr, "\n"); \
+        mmc_warn_break(0); \
+    } while (0)
 
-#endif	
+#endif    
 
 #define mmc_error(...) mmc_context_error("MMC", __VA_ARGS__)
 #define mmc_warn(...) mmc_context_error("MMC", __VA_ARGS__)
@@ -147,8 +147,8 @@ void *mmc_tryalloc2(size_t size1, size_t size2, void **mem2_return);
 #define mmc_alloc_boundary (2 * sizeof(void *))
 
 #define mmc_offset_align(offset) \
-	(((offset) + mmc_alloc_boundary - 1) \
-	- (((offset) + mmc_alloc_boundary - 1) % mmc_alloc_boundary))
+    (((offset) + mmc_alloc_boundary - 1) \
+    - (((offset) + mmc_alloc_boundary - 1) % mmc_alloc_boundary))
 
 /**Allocates a new memory and copies the given string into it.
  * If memory allocation fails the program is aborted.
@@ -171,51 +171,51 @@ void *mmc_memdup(const void *mem, size_t len);
 //Template code for reference counting
 typedef struct 
 {
-	int refcount;
+    int refcount;
 } MmcRC;
 
 #define mmc_rc_declare(TypeName, type_name) \
-	void type_name ## _ref(TypeName *object); \
-	void type_name ## _unref(TypeName *object); \
-	int type_name ## _get_refcount(TypeName *object);
+    void type_name ## _ref(TypeName *object); \
+    void type_name ## _unref(TypeName *object); \
+    int type_name ## _get_refcount(TypeName *object);
 
 #define mmc_rc_define(TypeName, type_name) \
-	static void type_name ## _destroy(TypeName *object); \
-	void type_name ## _ref(TypeName *object) \
-	{ \
-		MmcRC *x = (MmcRC *) object; \
-		 \
-		x->refcount++; \
-	} \
-	void type_name ## _unref(TypeName *object) \
-	{ \
-		MmcRC *x = (MmcRC *) object; \
-		 \
-		x->refcount--; \
-		if (x->refcount <= 0) \
-		{ \
-			type_name ## _destroy(object); \
-		} \
-	} \
-	int type_name ## _get_refcount(TypeName *object) \
-	{ \
-		MmcRC *x = (MmcRC *) object; \
-		 \
-		return x->refcount; \
-	}
+    static void type_name ## _destroy(TypeName *object); \
+    void type_name ## _ref(TypeName *object) \
+    { \
+        MmcRC *x = (MmcRC *) object; \
+         \
+        x->refcount++; \
+    } \
+    void type_name ## _unref(TypeName *object) \
+    { \
+        MmcRC *x = (MmcRC *) object; \
+         \
+        x->refcount--; \
+        if (x->refcount <= 0) \
+        { \
+            type_name ## _destroy(object); \
+        } \
+    } \
+    int type_name ## _get_refcount(TypeName *object) \
+    { \
+        MmcRC *x = (MmcRC *) object; \
+         \
+        return x->refcount; \
+    }
 
 #define mmc_rc_init(object) \
-	do { \
-		MmcRC *x = (MmcRC *) object; \
-		x->refcount = 1; \
-	} while (0)
+    do { \
+        MmcRC *x = (MmcRC *) object; \
+        x->refcount = 1; \
+    } while (0)
 
 
 //Resizable buffer
 typedef struct
 {
-	char *data;
-	size_t len, alloc_len;
+    char *data;
+    size_t len, alloc_len;
 } MmcRBuf;
 
 void mmc_rbuf_init(MmcRBuf *rbuf);
@@ -228,59 +228,22 @@ void mmc_rbuf_append1(MmcRBuf *rbuf, char val);
 typedef union { MmcRBuf parent; TypeName *data; } ArrayTypeName; \
 static inline void array_type_name ## _init(ArrayTypeName *array) \
 { \
-	mmc_rbuf_init((MmcRBuf *) array); \
+    mmc_rbuf_init((MmcRBuf *) array); \
 } \
 static inline void array_type_name ## _resize \
-	(ArrayTypeName *array, size_t new_len) \
+    (ArrayTypeName *array, size_t new_len) \
 { \
-	mmc_rbuf_resize((MmcRBuf *) array, new_len * sizeof(TypeName)); \
+    mmc_rbuf_resize((MmcRBuf *) array, new_len * sizeof(TypeName)); \
 } \
 static inline void array_type_name ## _append \
-	(ArrayTypeName *array, TypeName data) \
+    (ArrayTypeName *array, TypeName data) \
 { \
-	mmc_rbuf_append((MmcRBuf *) array, &data, sizeof(TypeName)); \
+    mmc_rbuf_append((MmcRBuf *) array, &data, sizeof(TypeName)); \
 } \
 static inline size_t array_type_name ## _length(ArrayTypeName *array) \
 { \
-	return ((MmcRBuf *) array)->len / sizeof(TypeName); \
+    return ((MmcRBuf *) array)->len / sizeof(TypeName); \
 }
-
-
-//Generic handling of callback arguments
-typedef struct 
-{
-	size_t size;
-} MmcSized;
-
-#define MMC_SIZED_DECLARE(type, name) \
-	type name; ((MmcSized *) (&name))->size = sizeof(name)
-	
-typedef MmcSized MmcArgs;
-
-#define MMC_ARGS_DECLARE(type, name) MMC_SIZED_DECLARE(type, name)
-
-
-//Generic callback format
-typedef struct _MmcCallback MmcCallback;
-
-typedef void (*MmcCallbackFn) (MmcArgs *args, MmcCallback *self);
-struct _MmcCallback
-{
-	size_t size;
-	MmcCallbackFn fn;
-}
-
-#define MMC_CALLBACK_DECLARE(type, name) \
-	type name; \
-	((MmcCallback *) (&name))->size = sizeof(name); \
-	((MmcCallback *) (&name))->fn = NULL
-
-typedef struct
-{
-	MmcCallback parent;
-	MmcCallbackFn indirect_fn;
-} MmcIndirectCallback;
-
 
 
 /**

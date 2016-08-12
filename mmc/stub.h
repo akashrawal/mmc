@@ -24,7 +24,7 @@ typedef MmcStatus (*MmcStubReadReply) (MmcMsg *reply_msg, void *out_args);
 
 typedef struct
 {
-	MmcStubCreateMsg create_msg;
-	MmcStubReadReply read_reply;
+    MmcStubCreateMsg create_msg;
+    MmcStubReadReply read_reply;
 } MmcStub;
 

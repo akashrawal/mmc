@@ -23,67 +23,67 @@
 mmc_rc_define(MmcMsg, mmc_msg)
 
 static void mmc_msg_init(MmcMsg *msg, void *mem, size_t mem_len, 
-	MmcFreeFn mem_free, size_t submsgs_len)
+    MmcFreeFn mem_free, size_t submsgs_len)
 {
-	int i;
-	
-	mmc_rc_init(msg);
-	
-	msg->mem = mem;
-	msg->mem_len = mem_len;
-	msg->mem_free = mem_free;
-	msg->submsgs_len = submsgs_len;
-	
-	for (i = 0; i < submsgs_len; i++)
-	{
-		msg->submsgs[i] = NULL;
-	}
+    int i;
+    
+    mmc_rc_init(msg);
+    
+    msg->mem = mem;
+    msg->mem_len = mem_len;
+    msg->mem_free = mem_free;
+    msg->submsgs_len = submsgs_len;
+    
+    for (i = 0; i < submsgs_len; i++)
+    {
+        msg->submsgs[i] = NULL;
+    }
 }
 
 MmcMsg *mmc_msg_new
-	(size_t mem_len, MmcFreeFn mem_free, void *mem, size_t submsgs_len)
+    (size_t mem_len, MmcFreeFn mem_free, void *mem, size_t submsgs_len)
 {
-	MmcMsg *msg;
-	
-	{
-		size_t this_len 
-			= sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
-		msg = mmc_alloc(this_len);
-	}
-	
-	mmc_msg_init(msg, mem, mem_len, mem_free, submsgs_len);
-	
-	return msg;
+    MmcMsg *msg;
+    
+    {
+        size_t this_len 
+            = sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
+        msg = mmc_alloc(this_len);
+    }
+    
+    mmc_msg_init(msg, mem, mem_len, mem_free, submsgs_len);
+    
+    return msg;
 }
 
 MmcMsg *mmc_msg_newa(size_t mem_len, size_t submsgs_len)
 {
-	MmcMsg *msg;
-	void *mem;
-	
-	{
-		size_t this_len 
-			= sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
-		msg = mmc_alloc2(this_len, mem_len, &mem);
-	}
-	
-	mmc_msg_init(msg, mem, mem_len, NULL, submsgs_len);
-	
-	return msg;
+    MmcMsg *msg;
+    void *mem;
+    
+    {
+        size_t this_len 
+            = sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
+        msg = mmc_alloc2(this_len, mem_len, &mem);
+    }
+    
+    mmc_msg_init(msg, mem, mem_len, NULL, submsgs_len);
+    
+    return msg;
 }
 
 static void mmc_msg_destroy(MmcMsg *msg)
 {
-	int i;
-	
-	if (msg->mem_free)
-		(* msg->mem_free) (msg->mem);
-	
-	for (i = 0; i < msg->submsgs_len; i++)
-	{
-		if (msg->submsgs[i])
-			mmc_msg_unref(msg->submsgs[i]);
-	}
-	
-	free(msg);
+    int i;
+    
+    if (msg->mem_free)
+        (* msg->mem_free) (msg->mem);
+    
+    for (i = 0; i < msg->submsgs_len; i++)
+    {
+        if (msg->submsgs[i])
+            mmc_msg_unref(msg->submsgs[i]);
+    }
+    
+    free(msg);
 }
