@@ -89,7 +89,7 @@ typedef enum
 #endif	
 
 #define mmc_error(...) mmc_context_error("MMC", __VA_ARGS__)
-#define mmc_warn(...) mmc_context_error("MMC", __VA_ARGS__)
+#define mmc_warn(...) mmc_context_warn("MMC", __VA_ARGS__)
 
 /**If you want to break at an error or warning from Modular Middleware
  * use debugger to break at this function.
