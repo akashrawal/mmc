@@ -24,26 +24,26 @@
 //Abstract class MPContext:
 
 MmcMPContext *mmc_mp_context_create
-    (size_t struct_size, MmcMPContextReplyFn reply_fn)
+	(size_t struct_size, MmcMPContextReplyFn reply_fn)
 {
-    MmcMPContext *ctx;
-    
-    if (struct_size < sizeof(MmcMPContext))
-        mmc_error("struct_size should be atleast sizeof(MmcMPContext)");
-    
-    ctx = (MmcMPContext *) mmc_alloc(struct_size);
-    
-    ctx->reply_fn = reply_fn;
-    
-    return ctx;
+	MmcMPContext *ctx;
+	
+	if (struct_size < sizeof(MmcMPContext))
+		mmc_error("struct_size should be atleast sizeof(MmcMPContext)");
+	
+	ctx = (MmcMPContext *) mmc_alloc(struct_size);
+	
+	ctx->reply_fn = reply_fn;
+	
+	return ctx;
 }
 
 //Virtual function to send reply back
 void mmc_mp_context_reply
-    (MmcMPContext *ctx, MmcMsg *reply_msg)
+	(MmcMPContext *ctx, MmcMsg *reply_msg)
 {
-    (*ctx->reply_fn)(ctx, reply_msg);
-    free(ctx);
+	(*ctx->reply_fn)(ctx, reply_msg);
+	free(ctx);
 }
 
 
@@ -54,36 +54,36 @@ mmc_rc_define(MmcServant, mmc_servant)
 
 //Base class constructor
 MmcServant *mmc_servant_create
-    (size_t struct_size, 
-    MmcServantHandleMsgFn handle_msg, MmcServantDestroyFn destroy)
+	(size_t struct_size, 
+	MmcServantHandleMsgFn handle_msg, MmcServantDestroyFn destroy)
 {
-    MmcServant *servant;
-    
-    if (struct_size < sizeof(MmcServant))
-        mmc_error("struct_size should be atleast MmcServant");
-    
-    servant = (MmcServant *) mmc_alloc(struct_size);
-    
-    mmc_rc_init(servant);
-    servant->handle_msg = handle_msg;
-    servant->destroy = destroy;
-    
-    return servant;
+	MmcServant *servant;
+	
+	if (struct_size < sizeof(MmcServant))
+		mmc_error("struct_size should be atleast MmcServant");
+	
+	servant = (MmcServant *) mmc_alloc(struct_size);
+	
+	mmc_rc_init(servant);
+	servant->handle_msg = handle_msg;
+	servant->destroy = destroy;
+	
+	return servant;
 }
-    
+	
 //Virtual function to deliver message to servant
 void mmc_servant_handle_msg
-    (MmcServant *servant, MmcMsg *msg, MmcMPContext *ctx)
+	(MmcServant *servant, MmcMsg *msg, MmcMPContext *ctx)
 {
-    (*servant->handle_msg) (servant, msg, ctx);
+	(*servant->handle_msg) (servant, msg, ctx);
 }
 
 //Destructor
 void mmc_servant_destroy(MmcServant *servant)
 {
-    (* servant->destroy)(servant);
-    
-    free(servant);
+	(* servant->destroy)(servant);
+	
+	free(servant);
 }
 
 

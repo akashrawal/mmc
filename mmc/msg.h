@@ -24,17 +24,17 @@ typedef void (*MmcFreeFn)(void *mem);
 
 struct _MmcMsg
 {
-    MmcRC parent;
-    size_t mem_len;
-    MmcFreeFn mem_free;
-    void *mem;
-    size_t submsgs_len;
-    MmcMsg *submsgs[];
+	MmcRC parent;
+	size_t mem_len;
+	MmcFreeFn mem_free;
+	void *mem;
+	size_t submsgs_len;
+	MmcMsg *submsgs[];
 };
 
 mmc_rc_declare(MmcMsg, mmc_msg)
 
 MmcMsg *mmc_msg_new
-    (size_t mem_len, MmcFreeFn mem_free, void *mem, size_t submsgs_len);
+	(size_t mem_len, MmcFreeFn mem_free, void *mem, size_t submsgs_len);
 
 MmcMsg *mmc_msg_newa(size_t mem_len, size_t submsgs_len);
