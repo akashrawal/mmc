@@ -68,5 +68,5 @@ typedef struct _MmcServant MmcServant;
 	void mmc_servant_handle_msg
 		(MmcServant *servant, MmcMsg *msg, MmcMPContext *ctx);
 	
-	mmc_rc_declare(MmcServant, mmc_servant)
+	mmc_rc_declare(MmcServant, mmc_servant);
 

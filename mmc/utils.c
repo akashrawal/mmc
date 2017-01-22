@@ -30,6 +30,8 @@ void mmc_warn_break(int to_abort)
 //Memory allocation functions
 void *mmc_alloc(size_t size)
 {
+	if (size == 0)
+		mmc_error("Cannot allocate memory of zero bytes");
 	void *mem = mmc_tryalloc(size);
 	if (! mem)
 	{
@@ -40,6 +42,8 @@ void *mmc_alloc(size_t size)
 
 void *mmc_realloc(void *old_mem, size_t size)
 {
+	if (size == 0)
+		mmc_error("Cannot allocate memory of zero bytes");
 	void *mem = mmc_tryrealloc(old_mem, size);
 	if (! mem)
 	{
@@ -105,8 +109,6 @@ void *mmc_memdup(const void *mem, size_t len)
 
 //Resizable buffer
 
-#define MMC_RBUF_MIN_LEN 32
-
 void mmc_rbuf_init(MmcRBuf *rbuf)
 {
 	rbuf->len = 0;
@@ -116,29 +118,14 @@ void mmc_rbuf_init(MmcRBuf *rbuf)
 
 void mmc_rbuf_resize(MmcRBuf *rbuf, size_t new_len)
 {
-	if (new_len > rbuf->alloc_len)
-	{
-		while (new_len > rbuf->alloc_len)
-			rbuf->alloc_len *= 2;
-		
-		rbuf->data = (char *) mmc_realloc(rbuf->data, rbuf->alloc_len);
-	}
-	else if (new_len <= MMC_RBUF_MIN_LEN 
-		&& rbuf->alloc_len > MMC_RBUF_MIN_LEN)
-	{
-		rbuf->alloc_len = MMC_RBUF_MIN_LEN;
-		
-		rbuf->data = (char *) mmc_realloc(rbuf->data, rbuf->alloc_len);
-	}
-	else if (new_len < (rbuf->alloc_len / 2))
-	{
-		while (new_len < (rbuf->alloc_len / 2))
-			rbuf->alloc_len /= 2;
-		
-		rbuf->data = (char *) mmc_realloc(rbuf->data, rbuf->alloc_len);
-	}
-	
+	size_t new_alloc_len;
 	rbuf->len = new_len;
+	new_alloc_len = mmc_calc_alloc_len(new_len);
+	if (rbuf->alloc_len != new_alloc_len)
+	{
+		rbuf->data = (char *) mmc_realloc(rbuf->data, rbuf->alloc_len);
+		rbuf->alloc_len = new_alloc_len;
+	}
 }
 
 void mmc_rbuf_append(MmcRBuf *rbuf, const void *data, size_t len)

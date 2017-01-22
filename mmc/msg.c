@@ -20,7 +20,7 @@
 
 #include "incl.h"
 
-mmc_rc_define(MmcMsg, mmc_msg)
+mmc_rc_define(MmcMsg, mmc_msg);
 
 static void mmc_msg_init(MmcMsg *msg, void *mem, size_t mem_len, 
 	MmcFreeFn mem_free, size_t submsgs_len)

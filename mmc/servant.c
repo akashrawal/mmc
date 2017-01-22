@@ -50,7 +50,7 @@ void mmc_mp_context_reply
 //Abstract class Servant:
 
 //Reference counting
-mmc_rc_define(MmcServant, mmc_servant)
+mmc_rc_define(MmcServant, mmc_servant);
 
 //Base class constructor
 MmcServant *mmc_servant_create

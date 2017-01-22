@@ -177,7 +177,7 @@ typedef struct
 #define mmc_rc_declare(TypeName, type_name) \
 	void type_name ## _ref(TypeName *object); \
 	void type_name ## _unref(TypeName *object); \
-	int type_name ## _get_refcount(TypeName *object);
+	int type_name ## _get_refcount(TypeName *object)
 
 #define mmc_rc_define(TypeName, type_name) \
 	static void type_name ## _destroy(TypeName *object); \
@@ -202,7 +202,8 @@ typedef struct
 		MmcRC *x = (MmcRC *) object; \
 		 \
 		return x->refcount; \
-	}
+	} \
+	typedef int MmcRcDefineTemplateEnd ## TypeName;
 
 #define mmc_rc_init(object) \
 	do { \
@@ -212,6 +213,29 @@ typedef struct
 
 
 //Resizable buffer
+#define MMC_RBUF_MIN_LEN 32
+static inline size_t mmc_calc_alloc_len(size_t new_len)
+{
+	//Fastest algorithm I know
+	//This works only on binary computers.
+
+	if (new_len <= MMC_RBUF_MIN_LEN)
+		return MMC_RBUF_MIN_LEN;
+	size_t r = (new_len - 1) | (MMC_RBUF_MIN_LEN - 1);
+	//r |= r >> 1; //< Unnecessary because of MMC_RBUF_MIN_LEN >= 16
+	//r |= r >> 2;
+	r |= r >> 4; 
+	r |= r >> 8; 
+	r |= r >> 16;
+	if (sizeof(size_t) > 32)
+		r |= r >> 32;
+	//if (sizeof(size_t) > 64)
+	//	r |= r >> 64;
+	r += 1;
+
+	return r;
+}
+
 typedef struct
 {
 	char *data;
@@ -240,10 +264,146 @@ static inline void array_type_name ## _append \
 { \
 	mmc_rbuf_append((MmcRBuf *) array, &data, sizeof(TypeName)); \
 } \
-static inline size_t array_type_name ## _length(ArrayTypeName *array) \
+static inline size_t array_type_name ## _size(ArrayTypeName *array) \
 { \
 	return ((MmcRBuf *) array)->len / sizeof(TypeName); \
-}
+} \
+static inline TypeName array_type_name ## _pop(ArrayTypeName *array) \
+{ \
+	size_t len = array_type_name ## _size(array); \
+	if (len == 0) \
+		mmc_error("Cannot pop from empty stack"); \
+	TypeName res = array->data[len - 1]; \
+	array_type_name ## _resize(array, len - 1); \
+	return res; \
+} \
+typedef int MmcDynamicArrayEnd ## ArrayTypeName
+
+//Template for dynamic array queues
+#define mmc_declare_queue(TypeName, ArrayTypeName, array_type_name) \
+typedef struct\
+{\
+	TypeName *data;\
+	size_t start, len, alloc_len;\
+} ArrayTypeName;\
+static inline void array_type_name ## _init(ArrayTypeName *array)\
+{\
+	array->start = array->len = 0;\
+	array->alloc_len = mmc_calc_alloc_len(0);\
+	array->data = mmc_alloc(array->alloc_len * sizeof(TypeName));\
+}\
+static inline TypeName *array_type_name ## _head(ArrayTypeName *array)\
+{\
+	return array->data + array->start;\
+}\
+static inline size_t array_type_name ## _size(ArrayTypeName *array)\
+{\
+	return array->len;\
+}\
+static inline TypeName * array_type_name ## _alloc(ArrayTypeName *array)\
+{\
+	if (array->start + array->len >= array->alloc_len)\
+	{\
+		if (array->len >= (array->alloc_len / 2))\
+		{\
+			size_t new_alloc_len = array->alloc_len * 2;\
+			TypeName *new_data = mmc_alloc(sizeof(TypeName) * new_alloc_len);\
+			memcpy(new_data, array->data + array->start, \
+					array->len * sizeof(TypeName));\
+			free(array->data);\
+			array->data = new_data;\
+			array->alloc_len = new_alloc_len;\
+			array->start = 0;\
+		}\
+		else\
+		{\
+			memmove(array->data, array->data + array->start, \
+					array->len * sizeof(TypeName));\
+			array->start = 0;\
+		}\
+	}\
+	TypeName *res = array->data + array->start + array->len;\
+	array->len++;\
+	return res;\
+}\
+static inline TypeName * array_type_name ## _alloc_n\
+(ArrayTypeName *array, size_t n)\
+{\
+	if (array->start + array->len + n > array->alloc_len)\
+	{\
+		if (array->len + n > (array->alloc_len / 2))\
+		{\
+			size_t new_alloc_len = mmc_calc_alloc_len(array->len + n);\
+			TypeName *new_data = mmc_alloc(sizeof(TypeName) * new_alloc_len);\
+			memcpy(new_data, array->data + array->start, \
+					array->len * sizeof(TypeName));\
+			free(array->data);\
+			array->data = new_data;\
+			array->alloc_len = new_alloc_len;\
+			array->start = 0;\
+		}\
+		else\
+		{\
+			memmove(array->data, array->data + array->start, \
+					array->len * sizeof(TypeName));\
+			array->start = 0;\
+		}\
+	}\
+	TypeName *res = array->data + array->start + array->len;\
+	array->len += n;\
+	return res;\
+}\
+static inline void array_type_name ## _push(ArrayTypeName *array, \
+		TypeName element)\
+{\
+	*array_type_name ## _alloc(array) = element;\
+}\
+static inline TypeName array_type_name ## _pop(ArrayTypeName *array)\
+{\
+	if (array->len == 0)\
+		mmc_error("Cannot pop from empty queue");\
+	TypeName res = array->data[array->start];\
+	array->start++;\
+	array->len--;\
+	if (array->len < array->alloc_len / 4 \
+			&& array->alloc_len > MMC_RBUF_MIN_LEN)\
+	{\
+		size_t new_alloc_len = array->alloc_len / 2;\
+		TypeName *new_data = mmc_alloc(sizeof(TypeName) * new_alloc_len);\
+		memcpy(new_data, array->data + array->start, \
+				array->len * sizeof(TypeName));\
+		free(array->data);\
+		array->data = new_data;\
+		array->alloc_len = new_alloc_len;\
+		array->start = 0;\
+	}\
+	return res;\
+}\
+static inline void array_type_name ## _pop_n(ArrayTypeName *array, size_t n)\
+{\
+	if (array->len < n)\
+		mmc_error("Too few elements to pop from queue(%d from %d)", \
+				n, array->len);\
+	array->start += n;\
+	array->len -= n;\
+	if (array->len < array->alloc_len / 4 \
+			&& array->alloc_len > MMC_RBUF_MIN_LEN)\
+	{\
+		size_t new_alloc_len = mmc_calc_alloc_len(array->len);\
+		TypeName *new_data = mmc_alloc(sizeof(TypeName) * new_alloc_len);\
+		memcpy(new_data, array->data + array->start, \
+				array->len * sizeof(TypeName));\
+		free(array->data);\
+		array->data = new_data;\
+		array->alloc_len = new_alloc_len;\
+		array->start = 0;\
+	}\
+}\
+static inline void array_type_name ## _destroy(ArrayTypeName *array)\
+{\
+	free(array->data);\
+}\
+typedef int MmcDynamicQueueEnd ## ArrayTypeName
 
 
 /**
