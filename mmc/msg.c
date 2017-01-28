@@ -64,7 +64,13 @@ MmcMsg *mmc_msg_newa(size_t mem_len, size_t submsgs_len)
 	{
 		size_t this_len 
 			= sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
-		msg = mmc_alloc2(this_len, mem_len, &mem);
+		if (mem_len > 0)
+			msg = mmc_alloc2(this_len, mem_len, &mem);
+		else
+		{
+			msg = mmc_alloc(this_len);
+			mem = NULL;
+		}
 	}
 	
 	mmc_msg_init(msg, mem, mem_len, NULL, submsgs_len);

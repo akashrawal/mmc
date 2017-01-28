@@ -221,9 +221,9 @@ static inline size_t mmc_calc_alloc_len(size_t new_len)
 
 	if (new_len <= MMC_RBUF_MIN_LEN)
 		return MMC_RBUF_MIN_LEN;
-	size_t r = (new_len - 1) | (MMC_RBUF_MIN_LEN - 1);
-	//r |= r >> 1; //< Unnecessary because of MMC_RBUF_MIN_LEN >= 16
-	//r |= r >> 2;
+	size_t r = new_len - 1;
+	r |= r >> 1;
+	r |= r >> 2;
 	r |= r >> 4; 
 	r |= r >> 8; 
 	r |= r >> 16;
@@ -366,9 +366,9 @@ static inline TypeName array_type_name ## _pop(ArrayTypeName *array)\
 	array->start++;\
 	array->len--;\
 	if (array->len < array->alloc_len / 4 \
-			&& array->alloc_len > MMC_RBUF_MIN_LEN)\
+			&& array->alloc_len / 4 >= MMC_RBUF_MIN_LEN)\
 	{\
-		size_t new_alloc_len = array->alloc_len / 2;\
+		size_t new_alloc_len = array->alloc_len / 4;\
 		TypeName *new_data = mmc_alloc(sizeof(TypeName) * new_alloc_len);\
 		memcpy(new_data, array->data + array->start, \
 				array->len * sizeof(TypeName));\
