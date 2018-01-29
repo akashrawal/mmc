@@ -4,6 +4,7 @@
 AC_INIT([MMC],[0.0.0],[],[mtc],[https://github.com/akashrawal/mmc])
 AC_CONFIG_SRCDIR([mmc/utils.h]) #FIXME: filename
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([auxdir])
 AM_INIT_AUTOMAKE([-Wall -Werror silent-rules])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 AM_PROG_AR
