@@ -5,15 +5,11 @@ lib_LTLIBRARIES = libmmc.la
 #libmmc.la
 mmc_c = \
 	utils.c \
-	msg.c \
-	stub.c \
-	servant.c
+	msg.c
 
 mmc_h = mmc.h incl.h \
 	utils.h \
-	msg.h \
-	stub.h \
-	servant.h
+	msg.h
      
 libmmc_la_SOURCES = $(mmc_c) $(mmc_h)       
 libmmc_la_CFLAGS = -Wall -I$(top_builddir) -I$(top_srcdir)

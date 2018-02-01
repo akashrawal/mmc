@@ -28,7 +28,5 @@
 //Include all modules in dependency-based order
 #include "utils.h"
 #include "msg.h"
-#include "stub.h"
-#include "servant.h"
 
 
