@@ -78,6 +78,48 @@ MmcMsg *mmc_msg_newa(size_t mem_len, size_t submsgs_len)
 	return msg;
 }
 
+MmcMsg *mmc_msg_try_new
+	(size_t mem_len, MmcFreeFn mem_free, void *mem, size_t submsgs_len)
+{
+	MmcMsg *msg;
+	
+	{
+		size_t this_len 
+			= sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
+		msg = mmc_tryalloc(this_len);
+		if (! msg)
+			return NULL;
+	}
+	
+	mmc_msg_init(msg, mem, mem_len, mem_free, submsgs_len);
+	
+	return msg;
+}
+
+MmcMsg *mmc_msg_try_newa(size_t mem_len, size_t submsgs_len)
+{
+	MmcMsg *msg;
+	void *mem;
+	
+	{
+		size_t this_len 
+			= sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
+		if (mem_len > 0)
+			msg = mmc_tryalloc2(this_len, mem_len, &mem);
+		else
+		{
+			msg = mmc_tryalloc(this_len);
+			mem = NULL;
+		}
+		if (! msg)
+			return NULL;
+	}
+	
+	mmc_msg_init(msg, mem, mem_len, NULL, submsgs_len);
+	
+	return msg;
+}
+
 static void mmc_msg_destroy(MmcMsg *msg)
 {
 	int i;

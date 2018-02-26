@@ -38,3 +38,8 @@ MmcMsg *mmc_msg_new
 	(size_t mem_len, MmcFreeFn mem_free, void *mem, size_t submsgs_len);
 
 MmcMsg *mmc_msg_newa(size_t mem_len, size_t submsgs_len);
+
+MmcMsg *mmc_msg_try_new
+	(size_t mem_len, MmcFreeFn mem_free, void *mem, size_t submsgs_len);
+
+MmcMsg *mmc_msg_try_newa(size_t mem_len, size_t submsgs_len);

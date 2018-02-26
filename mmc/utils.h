@@ -31,7 +31,7 @@ typedef enum
 	MMC_SUCCESS = 0,
 	MMC_FAILURE = -1
 } MmcStatus;
-
+//TODO: Rethink about warning and error functions
 //Adds integer to pointer
 #define MMC_PTR_ADD(ptr, bytes) ((void *) (((int8_t *) (ptr)) + (bytes)))
 
@@ -143,7 +143,7 @@ void *mmc_tryalloc2(size_t size1, size_t size2, void **mem2_return);
 
 #define mmc_new(type) ((type *) mmc_alloc(sizeof(type)))
 
-//LATER: Check if this is correct
+//TODO: Check if this is correct
 #define mmc_alloc_boundary (2 * sizeof(void *))
 
 #define mmc_offset_align(offset) \
