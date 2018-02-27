@@ -39,7 +39,7 @@ typedef enum
 	((type *) (MMC_PTR_ADD((ptr), -(offsetof(type, member)))))
 
 //Pointer casting macros
-#define MMC_UINT_TO_PTR(v) MMC_INT_TO_PTR(v))
+#define MMC_UINT_TO_PTR(v) MMC_INT_TO_PTR(v)
 #define MMC_UINT16_TO_PTR(v) MMC_INT16_TO_PTR(v)
 #define MMC_UINT32_TO_PTR(v) MMC_INT32_TO_PTR(v)
 
