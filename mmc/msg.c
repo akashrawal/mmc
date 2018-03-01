@@ -135,3 +135,26 @@ static void mmc_msg_destroy(MmcMsg *msg)
 	
 	free(msg);
 }
+
+ssize_t mmc_msg_compare(MmcMsg *a, MmcMsg *b)
+{
+	ssize_t compres;
+	size_t i;
+
+	compres = a->mem_len - b->mem_len;
+	if (compres != 0)
+		return compres;
+	compres = a->submsgs_len - b->submsgs_len;
+	if (compres != 0)
+		return compres;
+	compres = memcmp(a->mem, b->mem, a->mem_len);
+	if (compres != 0)
+		return compres;
+	for (i = 0; i < a->submsgs_len; i++)
+	{
+		compres = mmc_msg_compare(a->submsgs[i], b->submsgs[i]);
+		if (compres != 0)
+			return compres;
+	}
+	return 0;
+}

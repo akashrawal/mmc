@@ -18,6 +18,8 @@
  * along with Modular Middleware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//TODO: Documentation
+
 typedef struct _MmcMsg MmcMsg;
 
 typedef void (*MmcFreeFn)(void *mem);
@@ -43,3 +45,5 @@ MmcMsg *mmc_msg_try_new
 	(size_t mem_len, MmcFreeFn mem_free, void *mem, size_t submsgs_len);
 
 MmcMsg *mmc_msg_try_newa(size_t mem_len, size_t submsgs_len);
+
+ssize_t mmc_msg_compare(MmcMsg *a, MmcMsg *b);
