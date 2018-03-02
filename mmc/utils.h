@@ -38,15 +38,6 @@ typedef enum
 #define mmc_encl_struct(ptr, type, member) \
 	((type *) (MMC_PTR_ADD((ptr), -(offsetof(type, member)))))
 
-//Pointer casting macros
-#define MMC_UINT_TO_PTR(v) MMC_INT_TO_PTR(v)
-#define MMC_UINT16_TO_PTR(v) MMC_INT16_TO_PTR(v)
-#define MMC_UINT32_TO_PTR(v) MMC_INT32_TO_PTR(v)
-
-#define MMC_PTR_TO_UINT(v) ((unsigned int) MMC_PTR_TO_INT(v))
-#define MMC_PTR_TO_UINT16(v) ((uint16_t) MMC_PTR_TO_INT16(v))
-#define MMC_PTR_TO_UINT32(v) ((uint32_t) MMC_PTR_TO_INT32(v))
-
 #define MMC_VAR_ARRAY_SIZE 2
 
 //Errors
