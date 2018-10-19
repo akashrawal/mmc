@@ -31,7 +31,7 @@ typedef enum
 	MMC_SUCCESS = 0,
 	MMC_FAILURE = -1
 } MmcStatus;
-//TODO: Rethink about warning and error functions
+
 //Adds integer to pointer
 #define MMC_PTR_ADD(ptr, bytes) ((void *) (((int8_t *) (ptr)) + (bytes)))
 
@@ -45,7 +45,8 @@ typedef enum
 
 #define mmc_context_error(context, ...) \
 	do { \
-		fprintf(stderr, context ": %s: %s:%d: ERROR:", __PRETTY_FUNCTION__, __FILE__, __LINE__); \
+		fprintf(stderr, context ": %s: %s:%d: ERROR:", \
+				__PRETTY_FUNCTION__, __FILE__, __LINE__); \
 		fprintf(stderr, __VA_ARGS__); \
 		fprintf(stderr, "\n"); \
 		mmc_warn_break(1); \
@@ -53,10 +54,32 @@ typedef enum
 
 #define mmc_context_warn(context, ...) \
 	do { \
-		fprintf(stderr, context ": %s: %s:%d: WARNING:", __PRETTY_FUNCTION__, __FILE__, __LINE__); \
+		fprintf(stderr, context ": %s: %s:%d: WARNING:", \
+				__PRETTY_FUNCTION__, __FILE__, __LINE__); \
 		fprintf(stderr, __VA_ARGS__); \
 		fprintf(stderr, "\n"); \
 		mmc_warn_break(0); \
+	} while (0)
+
+#define mmc_context_debug(context, ...) \
+	do { \
+		fprintf(stderr, context ": %s: %s:%d: DEBUG:", \
+				__PRETTY_FUNCTION__, __FILE__, __LINE__); \
+		fprintf(stderr, __VA_ARGS__); \
+		fprintf(stderr, "\n"); \
+		mmc_warn_break(0); \
+	} while (0)
+
+#define mmc_context_assert(context, expr, ...) \
+	do { \
+		if (! (expr)) \
+		{ \
+			fprintf(stderr, context ": %s: %s:%d: ERROR:", \
+					__PRETTY_FUNCTION__, __FILE__, __LINE__); \
+			fprintf(stderr, __VA_ARGS__); \
+			fprintf(stderr, "\nFailed assertion: [" #expr "]\n"); \
+			mmc_warn_break(1); \
+		} \
 	} while (0)
 
 #else
@@ -77,10 +100,31 @@ typedef enum
 		mmc_warn_break(0); \
 	} while (0)
 
+#define mmc_context_debug(context, ...) \
+	do { \
+		fprintf(stderr, context ": %s:%d: DEBUG:", __FILE__, __LINE__); \
+		fprintf(stderr, __VA_ARGS__); \
+		fprintf(stderr, "\n"); \
+		mmc_warn_break(0); \
+	} while (0)
+
+#define mmc_context_assert(context, expr, ...) \
+	do { \
+		if (! (expr)) \
+		{ \
+			fprintf(stderr, context ": %s:%d: ERROR:", \
+					__FILE__, __LINE__); \
+			fprintf(stderr, __VA_ARGS__); \
+			fprintf(stderr, " \nFailed assertion [" #expr "]\n"); \
+			mmc_warn_break(1); \
+		} \
+	} while (0)
+
 #endif	
 
 #define mmc_error(...) mmc_context_error("MMC", __VA_ARGS__)
 #define mmc_warn(...) mmc_context_warn("MMC", __VA_ARGS__)
+#define mmc_debug(...) mmc_context_debug("MMC", __VA_ARGS__)
 
 /**If you want to break at an error or warning from Modular Middleware
  * use debugger to break at this function.
