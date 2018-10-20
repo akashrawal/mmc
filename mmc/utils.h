@@ -125,6 +125,7 @@ typedef enum
 #define mmc_error(...) mmc_context_error("MMC", __VA_ARGS__)
 #define mmc_warn(...) mmc_context_warn("MMC", __VA_ARGS__)
 #define mmc_debug(...) mmc_context_debug("MMC", __VA_ARGS__)
+#define mmc_assert(expr, ...) mmc_context_assert("MMC", expr, __VA_ARGS__)
 
 /**If you want to break at an error or warning from Modular Middleware
  * use debugger to break at this function.

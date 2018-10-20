@@ -123,7 +123,7 @@ void mmc_rbuf_resize(MmcRBuf *rbuf, size_t new_len)
 	new_alloc_len = mmc_calc_alloc_len(new_len);
 	if (rbuf->alloc_len != new_alloc_len)
 	{
-		rbuf->data = (char *) mmc_realloc(rbuf->data, rbuf->alloc_len);
+		rbuf->data = (char *) mmc_realloc(rbuf->data, new_alloc_len);
 		rbuf->alloc_len = new_alloc_len;
 	}
 }
