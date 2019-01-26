@@ -20,14 +20,14 @@
 
 #include "incl.h"
 
-mmc_rc_define(MmcMsg, mmc_msg);
+mdsl_rc_define(MmcMsg, mmc_msg);
 
 static void mmc_msg_init(MmcMsg *msg, void *mem, size_t mem_len, 
 	MmcFreeFn mem_free, size_t submsgs_len)
 {
 	int i;
 	
-	mmc_rc_init(msg);
+	mdsl_rc_init(msg);
 	
 	msg->mem = mem;
 	msg->mem_len = mem_len;
@@ -48,7 +48,7 @@ MmcMsg *mmc_msg_new
 	{
 		size_t this_len 
 			= sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
-		msg = mmc_alloc(this_len);
+		msg = mdsl_alloc(this_len);
 	}
 	
 	mmc_msg_init(msg, mem, mem_len, mem_free, submsgs_len);
@@ -65,10 +65,10 @@ MmcMsg *mmc_msg_newa(size_t mem_len, size_t submsgs_len)
 		size_t this_len 
 			= sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
 		if (mem_len > 0)
-			msg = mmc_alloc2(this_len, mem_len, &mem);
+			msg = mdsl_alloc2(this_len, mem_len, &mem);
 		else
 		{
-			msg = mmc_alloc(this_len);
+			msg = mdsl_alloc(this_len);
 			mem = NULL;
 		}
 	}
@@ -86,7 +86,7 @@ MmcMsg *mmc_msg_try_new
 	{
 		size_t this_len 
 			= sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
-		msg = mmc_tryalloc(this_len);
+		msg = mdsl_tryalloc(this_len);
 		if (! msg)
 			return NULL;
 	}
@@ -105,10 +105,10 @@ MmcMsg *mmc_msg_try_newa(size_t mem_len, size_t submsgs_len)
 		size_t this_len 
 			= sizeof(MmcMsg) + (sizeof(void *) * submsgs_len);
 		if (mem_len > 0)
-			msg = mmc_tryalloc2(this_len, mem_len, &mem);
+			msg = mdsl_tryalloc2(this_len, mem_len, &mem);
 		else
 		{
-			msg = mmc_tryalloc(this_len);
+			msg = mdsl_tryalloc(this_len);
 			mem = NULL;
 		}
 		if (! msg)

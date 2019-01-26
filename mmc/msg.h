@@ -26,7 +26,7 @@ typedef void (*MmcFreeFn)(void *mem);
 
 struct _MmcMsg
 {
-	MmcRC parent;
+	MdslRC parent;
 	size_t mem_len;
 	MmcFreeFn mem_free;
 	void *mem;
@@ -34,7 +34,7 @@ struct _MmcMsg
 	MmcMsg *submsgs[];
 };
 
-mmc_rc_declare(MmcMsg, mmc_msg);
+mdsl_rc_declare(MmcMsg, mmc_msg);
 
 MmcMsg *mmc_msg_new
 	(size_t mem_len, MmcFreeFn mem_free, void *mem, size_t submsgs_len);

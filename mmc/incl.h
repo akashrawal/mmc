@@ -25,8 +25,15 @@
 #include <stdint.h>
 #include <sys/types.h>
 
+#include <mdsl/mdsl.h>
+
+//Logging macros
+#define mmc_error(...) mdsl_context_error("MMC", __VA_ARGS__)
+#define mmc_warn(...) mdsl_context_warn("MMC", __VA_ARGS__)
+#define mmc_debug(...) mdsl_context_debug("MMC", __VA_ARGS__)
+#define mmc_assert(expr, ...) mdsl_context_assert("MMC", expr, __VA_ARGS__)
+
 //Include all modules in dependency-based order
-#include "utils.h"
 #include "msg.h"
 
 

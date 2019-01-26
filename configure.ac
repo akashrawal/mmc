@@ -1,8 +1,8 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([MMC],[0.0.0],[],[mtc],[https://github.com/akashrawal/mmc])
-AC_CONFIG_SRCDIR([mmc/utils.h]) #FIXME: filename
+AC_INIT([MMC],[0.0.0],[],[mmc],[https://github.com/akashrawal/mmc])
+AC_CONFIG_SRCDIR([mmc/mmc.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([auxdir])
 AM_INIT_AUTOMAKE([-Wall -Werror silent-rules])
@@ -14,6 +14,9 @@ LT_INIT
 #TODO: Enforce C11
 AC_PROG_CC
 AM_PROG_CC_C_O
+
+# Checks for libraries
+PKG_CHECK_MODULES([MDSL], [mdsl >= 0.0.0])
 
 #Write all output
 
