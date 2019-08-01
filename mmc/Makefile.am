@@ -4,10 +4,12 @@ lib_LTLIBRARIES = libmmc.la
 
 #libmmc.la
 mmc_c = \
-	msg.c
+	msg.c \
+	iface.c
 
 mmc_h = mmc.h incl.h \
-	msg.h
+	msg.h \
+	iface.h
      
 libmmc_la_SOURCES = $(mmc_c) $(mmc_h)       
 libmmc_la_CFLAGS = -Wall -I$(top_builddir) -I$(top_srcdir)

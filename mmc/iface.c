@@ -1,5 +1,5 @@
-/* incl.h
- * Includes
+/* iface.h
+ * Standard interfaces
  * 
  * Copyright 2015-2019 Akash Rawal
  * This file is part of Modular Middleware.
@@ -18,23 +18,30 @@
  * along with Modular Middleware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//TODO: Decide the includes in API headers
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
-#include <sys/types.h>
+#include "incl.h"
 
-#include <mdsl/mdsl.h>
+mdsl_rc_define(MmcResponder, mmc_responder);
 
-//Logging macros
-#define mmc_error(...) mdsl_context_error("MMC", __VA_ARGS__)
-#define mmc_warn(...) mdsl_context_warn("MMC", __VA_ARGS__)
-#define mmc_debug(...) mdsl_context_debug("MMC", __VA_ARGS__)
-#define mmc_assert(expr, ...) mdsl_context_assert("MMC", expr, __VA_ARGS__)
+static void mmc_responder_destroy(MmcResponder *responder)
+{
+	(*responder->destroy)(responder);
+}
 
-//Include all modules in dependency-based order
-#include "msg.h"
-#include "iface.h"
+void mmc_responder_call(MmcResponder *responder, MmcMsg *msg)
+{
+	(*responder->call)(responder, msg);
+}
 
 
+mdsl_rc_define(MmcServant, mmc_servant);
+
+static void mmc_servant_destroy(MmcServant *servant)
+{
+	(*servant->destroy)(servant);
+}
+
+void mmc_servant_call
+	(MmcServant *servant, MmcMsg *msg, MmcResponder *responder)
+{
+	(*servant->call)(servant, msg, responder);
+}
