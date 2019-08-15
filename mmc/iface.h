@@ -20,18 +20,18 @@
 
 //TODO: Documentation
 
-typedef struct _MmcResponder MmcResponder;
-struct _MmcResponder
+typedef struct _MmcReplier MmcReplier;
+struct _MmcReplier
 {
 	MdslRC parent;	
 
 	void (*destroy)();
-	void (*call)(MmcResponder *responder, MmcMsg *msg);
+	void (*call)(MmcReplier *replier, MmcMsg *msg);
 };
 
-mdsl_rc_declare(MmcResponder, mmc_responder);
+mdsl_rc_declare(MmcReplier, mmc_replier);
 
-void mmc_responder_call(MmcResponder *responder, MmcMsg *msg);
+void mmc_replier_call(MmcReplier *replier, MmcMsg *msg);
 
 
 typedef struct _MmcServant MmcServant;
@@ -41,12 +41,12 @@ struct _MmcServant
 
 	void (*destroy)();
 	void (*call)
-		(MmcServant *servant, MmcMsg *msg, MmcResponder *responder);
+		(MmcServant *servant, MmcMsg *msg, MmcReplier *replier);
 };
 
 mdsl_rc_declare(MmcServant, mmc_servant);
 
 void mmc_servant_call
-	(MmcServant *servant, MmcMsg *msg, MmcResponder *responder);
+	(MmcServant *servant, MmcMsg *msg, MmcReplier *replier);
 
 

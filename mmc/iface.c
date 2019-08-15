@@ -20,16 +20,16 @@
 
 #include "incl.h"
 
-mdsl_rc_define(MmcResponder, mmc_responder);
+mdsl_rc_define(MmcReplier, mmc_replier);
 
-static void mmc_responder_destroy(MmcResponder *responder)
+static void mmc_replier_destroy(MmcReplier *replier)
 {
-	(*responder->destroy)(responder);
+	(*replier->destroy)(replier);
 }
 
-void mmc_responder_call(MmcResponder *responder, MmcMsg *msg)
+void mmc_replier_call(MmcReplier *replier, MmcMsg *msg)
 {
-	(*responder->call)(responder, msg);
+	(*replier->call)(replier, msg);
 }
 
 
@@ -41,7 +41,7 @@ static void mmc_servant_destroy(MmcServant *servant)
 }
 
 void mmc_servant_call
-	(MmcServant *servant, MmcMsg *msg, MmcResponder *responder)
+	(MmcServant *servant, MmcMsg *msg, MmcReplier *replier)
 {
-	(*servant->call)(servant, msg, responder);
+	(*servant->call)(servant, msg, replier);
 }
