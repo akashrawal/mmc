@@ -20,19 +20,21 @@
 
 //TODO: Documentation
 
+//MmcReplier
+
 typedef struct _MmcReplier MmcReplier;
 struct _MmcReplier
 {
 	MdslRC parent;	
 
-	void (*destroy)();
 	void (*call)(MmcReplier *replier, MmcMsg *msg);
 };
 
-mdsl_rc_declare(MmcReplier, mmc_replier);
 
 void mmc_replier_call(MmcReplier *replier, MmcMsg *msg);
 
+
+//MmcServant
 
 typedef struct _MmcServant MmcServant;
 struct _MmcServant
