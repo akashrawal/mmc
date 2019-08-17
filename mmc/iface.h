@@ -25,8 +25,6 @@
 typedef struct _MmcReplier MmcReplier;
 struct _MmcReplier
 {
-	MdslRC parent;	
-
 	void (*call)(MmcReplier *replier, MmcMsg *msg);
 };
 
@@ -41,7 +39,7 @@ struct _MmcServant
 {
 	MdslRC parent;	
 
-	void (*destroy)();
+	void (*destroy)(MmcServant *servant);
 	void (*call)
 		(MmcServant *servant, MmcMsg *msg, MmcReplier *replier);
 };
@@ -50,5 +48,4 @@ mdsl_rc_declare(MmcServant, mmc_servant);
 
 void mmc_servant_call
 	(MmcServant *servant, MmcMsg *msg, MmcReplier *replier);
-
 
